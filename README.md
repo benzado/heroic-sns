@@ -76,8 +76,10 @@ Then the object will simply parse and verify SNS messages it finds and pass them
 along to your app, taking no action.
 
 Once the middleware is set up, any notifications will be made available in your
-Rack environment under the `'sns.message'` key. If you are using Rails, your
+Rack environment under the `sns.message` key. If you are using Rails, your
 controller would have a method like this:
+
+    skip_before_filter :verify_authenticity_token, :only => [:handle_notification]
 
     def handle_notification
       if message = request.env['sns.message']
@@ -85,10 +87,14 @@ controller would have a method like this:
         payload = JSON.parse(message.body)
         do_something_awesome(payload)
       elsif error = request.env['sns.error']
-        logger.warn "Error in SNS endpoint: #{error.message}"
+        raise error # let the warning be logged
       end
       head :ok
     end
+
+You must skip the authenticity token verification to allow Amazon to POST to the
+controller action. Be careful not to disable it for more actions than you need.
+Be sure to disable any authentication checks for that action, too.
 
 ## How off-topic notifications are handled
 
