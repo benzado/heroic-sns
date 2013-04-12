@@ -48,7 +48,7 @@ class DemoApp
 end
 
 use Rack::Lint
-use Heroic::SNS::Endpoint, topic: /^arn:aws:sns:us-east-1:[0-9]+:.+$/
+use Heroic::SNS::Endpoint, topics: Proc.new { true }, auto_confirm: nil, auto_unsubscribe: nil
 use Rack::Lint
 use MessageCapture
 run DemoApp.new

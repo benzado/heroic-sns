@@ -2,6 +2,9 @@
 <html>
   <head>
     <title>Heroic::SNS::Endpoint Demo</title>
+    <style>
+      th { text-align: left; }
+    </style>
   </head>
   <body>
     <p>Send SNS messages to this server and then reload to see them here.</p>
@@ -15,9 +18,17 @@
           <tr><th>Topic</th><td><%= event.topic_arn %></td></td>
           <tr><th>Time</th><td><%= event.timestamp %></td></td>
           <tr><th>Type</th><td><%= event.type %></td></td>
-          <tr><th>Subject</th><td><%= event.subject %></td></td>
+          <% if event.subject %>
+            <tr><th>Subject</th><td><%= event.subject %></td></td>
+          <% end %>
         </table>
         <pre><%= event.body %></pre>
+        <% if event.subscribe_url %>
+          <div><a href="<%= event.subscribe_url %>">Click Here to Subscribe</a></div>
+        <% end %>
+        <% if event.unsubscribe_url %>
+          <div><a href="<%= event.unsubscribe_url %>">Click Here to Unsubscribe</a></div>
+        <% end %>
       <% end %>
     <% end %>
   </body>
