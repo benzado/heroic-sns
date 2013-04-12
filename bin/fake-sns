@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+require 'securerandom'
+require 'net/http'
+require 'json'
+
+Net::HTTP.start('localhost', 9292) do |http|
+  ARGV.each do |path|
+    File.open(path) do |f|
+      json = f.read
+      message = JSON.parse(json)
+      type, message_id, topic_arn = message.values_at(*%w[Type MessageId TopicArn])
+      puts "Type: #{type}"
+      puts "MessageId: #{message_id}"
+      puts "TopicArn: #{topic_arn}"
+      headers = {
+        'Content-Type' => 'text/plain',
+        'x-amz-sns-message-type' => type,
+        'x-amz-sns-message-id' => message_id,
+        'x-amz-sns-topic-arn' => topic_arn,
+        'x-amz-sns-subscription-arn' => "#{topic_arn}:#{SecureRandom.uuid}"
+      }
+      res = http.post('/', json, headers)
+      p res
+    end
+  end
+end

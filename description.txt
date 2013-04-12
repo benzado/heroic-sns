@@ -1,0 +1,5 @@
+Lightweight Rack middleware for AWS Simple Notification Service (SNS) endpoints.
+SNS messages are intercepted, parsed, verified, and passed along to the Rack
+application in the 'sns.message' environment key. The gem is designed to be
+lightweight and does not depend on any other gem besides 'rack' (specifically,
+the 'aws-sdk' gem is not required).

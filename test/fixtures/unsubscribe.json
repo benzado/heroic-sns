@@ -1,0 +1,12 @@
+{
+  "Type" : "UnsubscribeConfirmation",
+  "MessageId" : "30ce782a-cb22-474a-bb42-a4b2ebd0df6a",
+  "Token" : "2336412f37fb687f5d51e6e241d164b14a5cd1b9e5753984c8d8cb6b1ec4709760069dd0e49f5b8f0b9030fcd08778bf41c80d105a934de1699bdb77e286185a7e24c142b55cd16f58b7e7eedc478a384c875379b2d6d9f153a3909dd0912eb84e3c9c5a210f68f9ce8707a0d23d14f4",
+  "TopicArn" : "arn:aws:sns:us-east-1:777594007835:racktest",
+  "Message" : "You have chosen to deactivate subscription arn:aws:sns:us-east-1:777594007835:racktest:24ed571c-0bdb-4da8-925a-f47aa0777a00.\nTo cancel this operation and restore the subscription, visit the SubscribeURL included in this message.",
+  "SubscribeURL" : "https://sns.us-east-1.amazonaws.com/?Action=ConfirmSubscription&TopicArn=arn:aws:sns:us-east-1:777594007835:racktest&Token=2336412f37fb687f5d51e6e241d164b14a5cd1b9e5753984c8d8cb6b1ec4709760069dd0e49f5b8f0b9030fcd08778bf41c80d105a934de1699bdb77e286185a7e24c142b55cd16f58b7e7eedc478a384c875379b2d6d9f153a3909dd0912eb84e3c9c5a210f68f9ce8707a0d23d14f4",
+  "Timestamp" : "2013-04-09T20:00:52.060Z",
+  "SignatureVersion" : "1",
+  "Signature" : "M2cQRoTu16zvpZr8q8tgLuZeea1d5K+PS/AT1MqVCbGVr1hiax24JzlymoKSDYGTLAYFbLlh+Kx+0gbOQKfIVoxfUofsFZtCp/RW+iEAfinDfVBSfFoMyTeVVLZgsdigrdUVO99R707XwbS4zftj3dpIFP/2R5RzNzzPuAMN+pM=",
+  "SigningCertURL" : "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem"
+}

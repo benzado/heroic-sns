@@ -1,0 +1,12 @@
+{
+  "Type" : "SubscriptionConfirmation",
+  "MessageId" : "0d2474c6-4928-4878-aced-421f2f197b96",
+  "Token" : "2336412f37fb687f5d51e6e241d164b14a5cd1b9e576b8d39bd752f279ff94cfb9d0ba217bdf2898e2b48d719b903880a5332117e194d90f7ee844ddbd8d672883f7d83eb9f780cff7319dc07a004c79ee4d55d0a29e782d8ac2f6ef751f8c02728f3382c8ab3f5ce0b8a439f985bac5",
+  "TopicArn" : "arn:aws:sns:us-east-1:777594007835:racktest",
+  "Message" : "You have chosen to subscribe to the topic arn:aws:sns:us-east-1:777594007835:racktest.\nTo confirm the subscription, visit the SubscribeURL included in this message.",
+  "SubscribeURL" : "https://sns.us-east-1.amazonaws.com/?Action=ConfirmSubscription&TopicArn=arn:aws:sns:us-east-1:777594007835:racktest&Token=2336412f37fb687f5d51e6e241d164b14a5cd1b9e576b8d39bd752f279ff94cfb9d0ba217bdf2898e2b48d719b903880a5332117e194d90f7ee844ddbd8d672883f7d83eb9f780cff7319dc07a004c79ee4d55d0a29e782d8ac2f6ef751f8c02728f3382c8ab3f5ce0b8a439f985bac5",
+  "Timestamp" : "2013-04-09T19:44:39.541Z",
+  "SignatureVersion" : "1",
+  "Signature" : "ce73LnwE9kZ4sEUEGh/s63myK/sb7x1HkwP079h08CQN1wIF9/HVdqCEB56o8ngc9x1bp1lKQtHVVMPUWEoNnx1CJinj8/BcL0BiEL2Q/+4og1ucWMQ/3vnISVwE5MUrYzcDBFJdrZHDEO3RRCVeqF4GHV0nuD1CqKzvven8ORU=",
+  "SigningCertURL" : "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem"
+}

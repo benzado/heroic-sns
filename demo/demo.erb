@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Heroic::SNS::Endpoint Demo</title>
+  </head>
+  <body>
+    <p>Send SNS messages to this server and then reload to see them here.</p>
+    <% @events.each do |event| %>
+      <hr/>
+      <% if event.is_a? Heroic::SNS::Error %>
+        <p><b>Error</b> <code><%= event.message %></code></p>
+      <% else %>
+        <table>
+          <tr><th>Message</th><td><%= event.id %></td></td>
+          <tr><th>Topic</th><td><%= event.topic_arn %></td></td>
+          <tr><th>Time</th><td><%= event.timestamp %></td></td>
+          <tr><th>Type</th><td><%= event.type %></td></td>
+          <tr><th>Subject</th><td><%= event.subject %></td></td>
+        </table>
+        <pre><%= event.body %></pre>
+      <% end %>
+    <% end %>
+  </body>
+</html>
