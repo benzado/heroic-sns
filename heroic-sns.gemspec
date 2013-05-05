@@ -5,6 +5,7 @@ Gem::Specification.new do |s|
   s.version     = '1.0.0'
   s.summary     = "Lightweight Rack middleware for AWS SNS endpoints"
   s.description = File.read('description.txt')
+  s.license     = 'Apache'
 
   s.files       = %w[ README.md LICENSE ]
   s.files      += Dir['lib/**/*.rb']
