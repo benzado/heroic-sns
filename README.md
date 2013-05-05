@@ -130,3 +130,4 @@ You can send me an email at <ben@benzado.com> or Twitter [@benzado][]
 
 [@benzado]: https://twitter.com/benzado
 
+[![Build Status](https://travis-ci.org/benzado/heroic-sns.png?branch=master)](https://travis-ci.org/benzado/heroic-sns)
