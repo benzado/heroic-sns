@@ -25,7 +25,7 @@ module Heroic
       def sign!
         @msg['SigningCertURL'] = TEST_CERT_URL
         signature = TEST_CERT_KEY.sign(OpenSSL::Digest::SHA1.new, string_to_sign)
-        @msg['Signature'] = Base64::strict_encode64(signature)
+        @msg['Signature'] = Base64::encode64(signature)
       end
 
     end
