@@ -35,7 +35,7 @@ module Heroic
 
     class Endpoint
 
-      DEFAULT_OPTIONS = { auto_confirm: true, auto_resubscribe: false }
+      DEFAULT_OPTIONS = { :auto_confirm => true, :auto_resubscribe => false }
 
       def initialize(app, opt = {})
         @app = app
