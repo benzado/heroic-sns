@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'heroic-sns'
-  s.version     = '0.1.2.pre'
+  s.version     = '1.0.0'
   s.summary     = "Lightweight Rack middleware for AWS SNS endpoints"
   s.description = File.read('description.txt')
 
@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.files      += Dir['lib/**/*.rb']
   s.files      += Dir['test/**']
 
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 1.8.7'
   s.add_runtime_dependency 'rack', '~> 1.4'
 
   s.author      = "Benjamin Ragheb"
