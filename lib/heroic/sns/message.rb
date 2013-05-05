@@ -4,6 +4,8 @@ require 'base64'
 module Heroic
   module SNS
 
+    MAXIMUM_ALLOWED_AGE = 3600 # reject messages older than one hour
+
     CERTIFICATE_CACHE = Hash.new do |cache, cert_url|
       begin
         cert_data = open(cert_url)
@@ -101,6 +103,9 @@ module Heroic
       # Verifies the message signature. Raises an exception if it is not valid.
       # See: http://docs.aws.amazon.com/sns/latest/gsg/SendMessageToHttp.verify.signature.html
       def verify!
+        age = Time.now - timestamp
+        raise Errow.new("timestamp is in the future", self) if age < 0
+        raise Error.new("timestamp is too old", self) if age > MAXIMUM_ALLOWED_AGE
         if signature_version != '1'
           raise Error.new("unknown signature version: #{signature_version}", self)
         end
