@@ -130,11 +130,13 @@ module Heroic
       def string_to_sign
         keys = CANONICAL_KEYS_FOR_TYPE[self.type]
         raise Error.new("unrecognized message type: #{self.type}", self) unless keys
-        keys.each_with_object(String.new) do |key, string|
+        string = String.new
+        keys.each do |key|
           if @msg.has_key?(key) # in case message has no Subject
             string << key << "\n" << @msg[key] << "\n"
           end
         end
+        return string
       end
 
     end
