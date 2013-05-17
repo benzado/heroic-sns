@@ -1,34 +1,40 @@
-# Heroic SNS Endpoint
+# Heroic::SNS, Rack middleware for Amazon SNS endpoints
 
-This gem contains a lightweight Rack middleware for AWS Simple Notification
-Service (SNS) endpoints.
+Heroic::SNS provides secure, lightweight Rack middleware for AWS Simple
+Notification Service (SNS) endpoints.
 
-SNS messages to your web application are intercepted, parsed, verified, and then
-passed along to your Rack application in the `sns.message` environment key.
+Any SNS messages POSTed by Amazon to your web application are intercepted,
+parsed, verified, and then passed along via the `sns.message` environment key.
 
-If something goes wrong, the error will be passed along in the `sns.error`
-environment key. `Endpoint` does not log any messages itself.
+If something goes wrong, the error will be passed along via the `sns.error`
+environment key. `Heroic::SNS::Endpoint` does not log any messages itself.
 
-This gem *does not* depend on [aws-sdk][]. In fact, the only dependency it has
-beyond the standard libraries is [rack][]. This is intentional, since AWS
-credentials are not required to receive SNS notifications.
+**Heroic::SNS aims to be secure.** All message signatures are verified (to avoid
+forgeries) and stale messages are rejected (to avoid replay attacks).
+
+**Heroic::SNS aims to be lightweight.** Beside Ruby standard libraries there are
+no dependencies beside [rack][]. Specifically, Heroic::SNS *does not* depend on [aws-sdk][]. They will be friendly to each other, however, if you include both
+in a project.
 
 [aws-sdk]: https://github.com/aws/aws-sdk-ruby
 [rack]: http://rack.github.io/
 
 ## Overview
 
-1. Install in your middleware stack
-2. Get SNS messages from `env['sns.message']`
-3. Get errors from `env['sns.error']`
+1. `gem install heroic-sns`
+2. `require 'heroic/sns'`
+3. Install `Heroic::SNS::Endpoint` in your Rack app's middleware stack
+4. Get SNS messages from `env['sns.message']`
+5. Get errors from `env['sns.error']`
 
 ## How to use it
 
-Simply add the following to your `config.ru` file:
+Once you have installed the gem, simply add the following to your `config.ru`
+file:
 
     use Heroic::SNS::Endpoint, :topics => /:aws-ses-bounces$/
 
-For Rails, you could also install it in `/config/initializers/sns_endpoint.rb`:
+On Rails, you could also install it in `/config/initializers/sns_endpoint.rb`:
 
     Rails.application.config.middleware.use Heroic::SNS::Endpoint, :topic => ...
 
@@ -36,21 +42,21 @@ The Endpoint class takes an options hash as an argument, and understands these
 options:
 
 `:topic` is required, and provides a filter that defines what SNS topics are
-handled by this endpoint. A message is considered either "on-topic" or
-"off-topic". You can supply any of the following:
+handled by this endpoint. **A message is considered either "on-topic" or
+"off-topic".** You can supply any of the following:
 
-- a single topic ARN as a `String`
-- a list of topic ARNs as an `Array` of `String`
+- a `String` containing a single topic ARN
+- an `Array` of `String` representing a list of topic ARNs
 - a `RegExp` which matches on-topic ARNs
 - a `Proc` which accepts an ARN as an argument and returns `true` or `false` for
   on-topic and off-topic ARNs, respectively.
 
-The key `topics:` also works.
+The key `:topics` is also supported.
 
 `:auto_confirm` affects how on-topic subscription confirmations are handled.
 
-- If `true`, they are confirmed by retrieving the URL in the `SubscribeURL` field
-  of the SNS message, and your app is not notified.
+- If `true`, they are confirmed by retrieving the URL in the `SubscribeURL`
+  field of the SNS message, and your app is not notified.
 - If `false`, they are ignored; your app is also not notified.
 - If `nil`, there is no special handling and the message is passed along to your
   app.
@@ -96,7 +102,17 @@ You must skip the authenticity token verification to allow Amazon to POST to the
 controller action. Be careful not to disable it for more actions than you need.
 Be sure to disable any authentication checks for that action, too.
 
-## How off-topic notifications are handled
+## Multiple endpoint URLs
+
+If you are receiving multiple notifications at multiple endpoint URLs, you
+should only include one instance of the Endpoint in your middleware stack, and
+ensure that its topic filter allows all the notifications you are interested in
+to pass through.
+
+`Endpoint` does not interact with the URL path at all; if you want your
+subscriptions to go to different URLs, simply set them up that way.
+
+## Off-topic notifications
 
 As a security measure, `Endpoint` requires you to set up a topic filter. Any
 notifications that do not match this filter are not passed along to your
@@ -114,20 +130,20 @@ messages will be treated as on topic. Be aware that it is dangerous to leave
 `:auto_confirm` enabled with a permissive topic filter, as this will allow
 anyone to subscribe your web app to any SNS notification.
 
-## Receiving multiple notification topics
+## Contributing
 
-If you are receiving multiple notifications at multiple endpoint URLs, you should
-only include one instance of the Endpoint in your middleware stack, and ensure
-that its topic filter allows all the notifications you are interested in to pass
-through.
+* Fork the project.
+* Make your feature addition or bug fix and include tests.
+* Update `CHANGELOG`.
+* Send a pull request.
 
-`Endpoint` does not interact with the URL path at all; if you want your
-subscriptions to go to different URLs, simply set them up that way.
+## Copyright and License
 
-## Questions?
+Copyright 2013, Heroic Software Inc and Contributors.
 
-You can send me an email at <ben@benzado.com> or Twitter [@benzado][]
+This project [is licensed under the Apache license](LICENSE).
 
-[@benzado]: https://twitter.com/benzado
+Direct correspondence to Benjamin Ragheb via email at <ben@benzado.com>
+or on Twitter [@benzado](https://twitter.com/benzado).
 
 [![Build Status](https://travis-ci.org/benzado/heroic-sns.png?branch=master)](https://travis-ci.org/benzado/heroic-sns)

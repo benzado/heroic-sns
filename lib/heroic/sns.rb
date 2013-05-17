@@ -1,3 +1,4 @@
+require 'heroic/sns/version'
 require 'heroic/sns/message'
 require 'heroic/sns/endpoint'
 

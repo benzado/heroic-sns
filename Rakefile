@@ -1,4 +1,8 @@
+require 'rubygems'
+require 'bundler/gem_tasks'
 require 'rake/testtask'
+
+Bundler.setup(:default, :development)
 
 Rake::TestTask.new do |t|
   t.libs << 'test'

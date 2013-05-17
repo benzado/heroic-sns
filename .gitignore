@@ -1,3 +1,4 @@
 /capture
+/pkg
 /tmp
-heroic-sns-*.gem
+/Gemfile.lock
