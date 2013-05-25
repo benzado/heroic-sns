@@ -7,7 +7,15 @@ Gem::Specification.new do |s|
   s.name        = 'heroic-sns'
   s.version     = Heroic::SNS::VERSION
   s.summary     = "Lightweight Rack middleware for AWS SNS endpoints"
-  s.description = File.read('description.txt')
+  s.description = <<-EOD
+Secure, lightweight Rack middleware for Amazon Simple Notification Service (SNS)
+endpoints. SNS messages are intercepted, parsed, verified, and then passed along
+to the web application via the 'sns.message' environment key. Heroic::SNS has no
+dependencies besides Rack (specifically, the aws-sdk gem is not needed).
+SNS message signatures are verified in order to reject forgeries and replay
+attacks.
+EOD
+
   s.license     = 'Apache'
 
   s.author      = "Benjamin Ragheb"
