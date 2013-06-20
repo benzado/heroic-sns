@@ -5,7 +5,7 @@
 
 module Heroic
   module SNS
-
+=begin
     TEST_CERT_URL = 'https://sns.test.amazonaws.com/self-signed.pem'
     TEST_CERT_KEY = OpenSSL::PKey::RSA.new(File.read('test/fixtures/sns.key'))
 
@@ -15,7 +15,7 @@ module Heroic
       cert_data = File.read('test/fixtures/sns.crt')
       OpenSSL::X509::Certificate.new(cert_data)
     end
-
+=end
     class Message
 
       def update_timestamp!(t = Time.now)

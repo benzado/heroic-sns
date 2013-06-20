@@ -1,3 +1,7 @@
+### 1.1.0 (June 20, 2013)
+
+* Rework Cert logic - [@sbeckeriv]
+
 ### 1.0.1 (May 17, 2013)
 
 * Gem housekeeping, based on [advice by dblock](http://code.dblock.org/your-first-ruby-gem)
