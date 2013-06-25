@@ -5,17 +5,17 @@
 
 module Heroic
   module SNS
-=begin
+
     TEST_CERT_URL = 'https://sns.test.amazonaws.com/self-signed.pem'
     TEST_CERT_KEY = OpenSSL::PKey::RSA.new(File.read('test/fixtures/sns.key'))
 
-    CERTIFICATE_CACHE[TEST_CERT_URL] = begin
+    begin
       # Insert the certificate in the cache so that these tests aren't dependent
       # on network access (or the fact that the certificate is fake).
       cert_data = File.read('test/fixtures/sns.crt')
-      OpenSSL::X509::Certificate.new(cert_data)
+      CERTIFICATE_CACHE.put(TEST_CERT_URL, OpenSSL::X509::Certificate.new(cert_data))
     end
-=end
+
     class Message
 
       def update_timestamp!(t = Time.now)

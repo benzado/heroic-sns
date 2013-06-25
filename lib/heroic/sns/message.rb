@@ -1,78 +1,21 @@
 require 'json'
 require 'base64'
-require "singleton"
+require 'heroic/lru_cache'
 
 module Heroic
   module SNS
+
     MAXIMUM_ALLOWED_AGE = 3600 # reject messages older than one hour
+    MAXIMUM_ALLOWED_CERTIFICATES = 50
 
-    class CertificateCache 
-      MAXIMUM_ALLOWED_CERTIFICATES = 50 #Then clear
-      include Singleton
-
-      class CertificateStore
-        def initialize
-          @certificates = {}
-        end
-
-        def get_certificate(cert_url)
-          @certificates[cert_url] || load_certificate(cert_url)
-        end
-
-        def load(hash)
-          @certificates = hash
-        end
-
-        def clear_certificates
-          @certificates.clear
-        end
-
-        def certificate_count
-          @certificates.size
-        end
-
-        private
-
-        def load_certificate(cert_url)
-          begin
-            cert_data = open(cert_url)
-            @certificates[cert_url] = OpenSSL::X509::Certificate.new(cert_data.read)
-          rescue OpenSSL::X509::CertificateError => e
-            raise SNS::Error.new("unable to parse signing certificate: #{e.message}; URL: #{cert_url}")
-          rescue => e
-            raise SNS::Error.new("unable to retrieve signing certificate: #{e.message}; URL: #{cert_url}")
-          end
-        end
-      end
-
-      def initialize 
-        @cert_store = CertificateStore.new
-        @lock = Mutex.new
-      end
-
-      def get_certificate(cert_url)
-        @lock.synchronize do
-          clear_certificates_unlocked
-          @cert_store.get_certificate(cert_url)
-        end
-      end
-
-      def load(hash)
-        @lock.synchronize do
-          @cert_store.load(hash)
-        end
-      end
-
-      def clear_certificates
-        @lock.synchronize do
-          clear_certificates_unlocked
-        end
-      end
-      private 
-      def clear_certificates_unlocked
-          if(@cert_store.certificate_count > MAXIMUM_ALLOWED_CERTIFICATES)
-            @cert_store.clear_certificates
-          end
+    CERTIFICATE_CACHE = Heroic::LRUCache.new(MAXIMUM_ALLOWED_CERTIFICATES) do |cert_url|
+      begin
+        cert_data = open(cert_url)
+        OpenSSL::X509::Certificate.new(cert_data.read)
+      rescue OpenSSL::X509::CertificateError => e
+        raise SNS::Error.new("unable to parse signing certificate: #{e.message}; URL: #{cert_url}")
+      rescue => e
+        raise SNS::Error.new("unable to retrieve signing certificate: #{e.message}; URL: #{cert_url}")
       end
     end
 
@@ -172,7 +115,7 @@ module Heroic
           raise Error.new("signing certificate is not from amazonaws.com", self)
         end
         text = string_to_sign # will warn of invalid Type
-        cert = CertificateCache.instance.get_certificate(signing_cert_url)
+        cert = CERTIFICATE_CACHE.get(signing_cert_url)
         digest = OpenSSL::Digest::SHA1.new
         unless cert.public_key.verify(digest, signature, text)
           raise Error.new("message signature is invalid", self)
