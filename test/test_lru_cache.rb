@@ -14,12 +14,12 @@ class LRUCacheTest < Test::Unit::TestCase
 
   def test_get_put
     cache = Heroic::LRUCache.new(1)
-    assert_nil cache.get(:foo)
-    cache.put(:foo, :bar)
-    assert_equal :bar, cache.get(:foo)
-    cache.put(:answer, 42)
-    assert_equal 42, cache.get(:answer)
-    assert_nil cache.get(:foo)
+    assert_nil cache.get(:casey)
+    cache.put(:casey, :jones)
+    assert_equal :jones, cache.get(:casey)
+    cache.put(:april, :oneil)
+    assert_equal :oneil, cache.get(:april)
+    assert_nil cache.get(:casey)
   end
 
   def test_exceptions
@@ -32,41 +32,41 @@ class LRUCacheTest < Test::Unit::TestCase
       end
     end
     assert_raises RuntimeError do
-      cache.get(:foo)
+      cache.get(:ooze)
     end
     @should_throw = false
-    assert_equal 4, cache.get(:foo)
+    assert_equal 4, cache.get(:ooze)
   end
 
   def test_dynamic
     @counter = 0
-    cache = Heroic::LRUCache.new(3) { |k| @counter += 1; "hello, #{k}." }
+    cache = Heroic::LRUCache.new(3) { |k| @counter += 1; k.to_s.length }
     assert_equal 0, @counter
     cache.verify!
-    assert_equal "hello, leo.", cache.get(:leo); assert_equal 1, @counter
+    assert_equal 3, cache.get(:leo); assert_equal 1, @counter
     cache.verify!
-    assert_equal "hello, leo.", cache.get(:leo); assert_equal 1, @counter
+    assert_equal 3, cache.get(:leo); assert_equal 1, @counter
     cache.verify!
-    assert_equal "hello, donnie.", cache.get(:donnie); assert_equal 2, @counter
+    assert_equal 6, cache.get(:donnie); assert_equal 2, @counter
     cache.verify!
-    assert_equal "hello, donnie.", cache.get(:donnie); assert_equal 2, @counter
+    assert_equal 6, cache.get(:donnie); assert_equal 2, @counter
     cache.verify!
-    assert_equal "hello, mikey.", cache.get(:mikey); assert_equal 3, @counter
+    assert_equal 5, cache.get(:mikey); assert_equal 3, @counter
     cache.verify!
-    assert_equal "hello, mikey.", cache.get(:mikey); assert_equal 3, @counter
+    assert_equal 5, cache.get(:mikey); assert_equal 3, @counter
     cache.verify!
     # raph will push leo out of cache
-    assert_equal "hello, raph.", cache.get(:raph); assert_equal 4, @counter
+    assert_equal 4, cache.get(:raph); assert_equal 4, @counter
     cache.verify!
-    assert_equal "hello, raph.", cache.get(:raph); assert_equal 4, @counter
+    assert_equal 4, cache.get(:raph); assert_equal 4, @counter
     cache.verify!
     # mikey and donnie remain in cache
-    assert_equal "hello, mikey.", cache.get(:mikey); assert_equal 4, @counter
+    assert_equal 5, cache.get(:mikey); assert_equal 4, @counter
     cache.verify!
-    assert_equal "hello, donnie.", cache.get(:donnie); assert_equal 4, @counter
+    assert_equal 6, cache.get(:donnie); assert_equal 4, @counter
     cache.verify!
     # leo will have to be refetched
-    assert_equal "hello, leo.", cache.get(:leo); assert_equal 5, @counter
+    assert_equal 3, cache.get(:leo); assert_equal 5, @counter
     cache.verify!
   end
 
@@ -76,35 +76,34 @@ class LRUCacheTest < Test::Unit::TestCase
     cache = Heroic::LRUCache.new(100) do |k|
       sleep 1 # simulate slow generation, such as network I/O
       @lock.synchronize { @counter += 1 }
-      k.to_s
+      k.to_s.length
     end
     # load the cache with things to read
-    cache.put(:a, 'a')
-    cache.put(:b, 'b')
-    cache.put(:c, 'c')
+    cache.put(:leo, 0)
+    cache.put(:donnie, 0)
     start_time = Time.now
-    # start fetch in background
-    td = Thread.new do
-      cache.get(:d)
+    # Start threads to fetch in background. :leo and :donnie should return
+    # immediately, because the values are in the cache; :mikey and :raph should
+    # run concurrently; the second :raph should wait on the first :raph to
+    # complete.
+    threads = [:leo, :donnie, :mikey, :raph, :raph].map do |k|
+      Thread.new { cache.get(k) }
     end
-    te = Thread.new do
-      cache.get(:e)
-    end
-    # while background threads fetch, reading other keys should not be blocked
-    assert_equal 'a', cache.get(:a)
-    assert_equal 'b', cache.get(:b)
-    assert_equal 'c', cache.get(:c)
+    # Fetching values already in the cache should not block.
+    assert_equal 0, cache.get(:leo)
+    assert_equal 0, cache.get(:donnie)
     assert_equal 0, @lock.synchronize { @counter }
-    # now main thread should block until background items are fetched
-    assert_equal "d", cache.get(:d)
-    assert_equal "e", cache.get(:e)
+    # Fetching values being computed now will block until somebody computes them.
+    assert_equal 5, cache.get(:mikey)
+    assert_equal 4, cache.get(:raph)
     assert_equal 2, @lock.synchronize { @counter }
-    # reading the same values should be fast (they are cached)
-    assert_equal "d", cache.get(:d)
-    assert_equal "e", cache.get(:e)
+    # Fetching those same values should not trigger a recompute.
+    assert_equal 5, cache.get(:mikey)
+    assert_equal 4, cache.get(:raph)
     assert_equal 2, @lock.synchronize { @counter }
-    # look at time elapsed to make sure we didn't sleep more than once
-    [td, te].each { |t| t.join }
+    # Let's wait for all threads to finish, then check the clock to make sure we
+    # only slept for a second.
+    threads.each { |t| t.join }
     time_elapsed = (Time.now - start_time)
     assert_in_delta time_elapsed, 1.0, 0.01
   end
