@@ -4,10 +4,12 @@
 
 ### 1.0.1 (May 17, 2013)
 
-* Gem housekeeping, based on [advice by dblock](http://code.dblock.org/your-first-ruby-gem)
+* Gem housekeeping, [based on advice](http://code.dblock.org/your-first-ruby-gem) by [@dblock]
 
 ### 1.0.0 (May 5, 2013)
 
 * Initial public release - [@benzado]
 
 [@benzado]: http://github.com/benzado
+[@sbeckeriv]: http://github.com/sbeckeriv
+[@dblock]: http://github.com/dblock

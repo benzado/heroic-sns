@@ -1,37 +1,53 @@
 require 'openssl'
 require 'open-uri'
 
-# Heroic::SNS::Endpoint is Rack middleware which intercepts messages from
-# Amazon's Simple Notification Service (SNS). It makes the parsed and verified
-# message available to your application in the Rack environment under the
-# 'sns.message' key. If an error occurred during message handling, the error
-# is available in the Rack environment in the 'sns.error' key.
-
-# Endpoint is to be initialized with a hash of options. It understands three
-# different options:
-# - :topic (or :topics) specifies a filter that defines what SNS topics are
-#   handled by this endpoint ("on-topic"). You can supply any of the following:
-#   - a topic ARN as a String
-#   - a list of topic ARNs as an Array of Strings
-#   - a regular expression matching on-topic ARNs
-#   - a Proc which takes a topic ARN as a String and returns true or false.
-#   You must specify a topic filter. Use Proc.new { true } if you insist on
-#   indiscriminately accepting all notifications.
-# - :auto_confirm determines how SubscriptionConfirmation messages are handled.
-#   If true, the subscription is confirmed and your app is not notified.
-#   If false, the subscription is ignored and your app is not notified.
-#   If nil, the message is passed along to your app.
-
-# You can install this in your config.ru:
-#   use Heroic::SNS::Endpoint, :topics => /whatever/
-
-# For Rails, you can also install it in /config/initializers/sns_endpoint.rb:
-#   Rails.application.config.middleware.use Heroic::SNS::Endpoint, :topic => ...
-
 module Heroic
   module SNS
 
     SUBSCRIPTION_ARN_HTTP_HEADER = 'HTTP_X_AMZ_SNS_SUBSCRIPTION_ARN'
+
+=begin rdoc
+
+  Heroic::SNS::Endpoint is Rack middleware which intercepts messages from
+  Amazon's Simple Notification Service (SNS). It makes the parsed and
+  verified message available to your application in the Rack environment
+  under the 'sns.message' key. If an error occurred during message handling,
+  the error is available in the Rack environment in the 'sns.error' key.
+
+  Endpoint is to be initialized with a hash of options. It understands three
+  different options:
+
+  +:topic+ (or +:topics+) specifies a filter that defines what SNS topics
+  are handled by this endpoint ("on-topic"). You can supply any of the
+  following:
+  - a topic ARN as a String
+  - a list of topic ARNs as an Array of Strings
+  - a regular expression matching on-topic ARNs
+  - a Proc which takes a topic ARN as a String and returns true or false.
+  You *must* specify a topic filter. Use <code>Proc.new{true}</code> if
+  you insist on indiscriminately accepting all notifications.
+
+  +:auto_confirm+ determines how SubscriptionConfirmation messages are handled.
+  - If true, the subscription is confirmed and your app is not notified.
+    This is the default.
+  - If false, the subscription is ignored and your app is not notified.
+  - If nil, the message is passed along to your app.
+
+  +:auto_resubscribe+ affects how on-topic UnsubscribeConfirmation messages are handled.
+  - If false, they are ignored and your app is also not notified.
+    This is the default.
+  - If true, they topic is automatically re-subscribed by retrieving the URL in
+    the `SubscribeURL` field of the SNS message, and your app is not notified.
+  - If nil, there is no special handling and the message is passed along to your
+    app.
+
+  You can install this in your config.ru:
+    use Heroic::SNS::Endpoint, :topics => /whatever/
+
+  For Rails, you can also install it in /config/initializers/sns_endpoint.rb:
+    Rails.application.config.middleware.use Heroic::SNS::Endpoint, :topic => ...
+
+=end
 
     class Endpoint
 

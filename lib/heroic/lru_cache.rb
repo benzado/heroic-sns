@@ -3,36 +3,18 @@ module Heroic
   # This LRU Cache is a generic key-value store that is designed to be safe for
   # concurrent access. It uses a doubly-linked-list to identify which item was
   # least recently retrieved, and a Hash for fast retrieval by key.
-
+  #
   # To support concurrent access, it uses two levels of locks: a cache-level lock
   # is used to locate or create the desired node and move it to the front of the
   # LRU list. A node-level lock is used to synchronize access to the node's
   # value.
-
+  #
   # If a thread is busy generating a value to be stored in the cache, other
   # threads will still be able to read and write to other keys with no conflict.
   # However, if a second thread tries to read the value that the first thread is
   # generating, it will block until the first thread has completed its work.
 
   class LRUCache
-
-    class Node
-      attr_reader :key
-      attr_accessor :left, :right
-      def initialize(key)
-        @key = key
-        @lock = Mutex.new
-      end
-      def read
-        @lock.synchronize { @value ||= yield(@key) }
-      end
-      def write(value)
-        @lock.synchronize { @value = value }
-      end
-      def to_s
-        sprintf '<Node:%x(%s)>', self.object_id, @key.inspect
-      end
-    end
 
     # If you yield a block to the constructor, it will be called on every cache
     # miss to generate the needed value. This is optional but recommended, as
@@ -53,25 +35,34 @@ module Heroic
       @rightmost = nil
     end
 
+    # Retrieve a value from the cache for a given key. If the value is in the
+    # cache, the method will return immediately. If the value is not in the
+    # cache and a block was provided to the constructor, it will be invoked to
+    # generate the value and insert it into the cache. If another thread is in
+    # the process of generating the same value, the current thread will wait for
+    # it to complete.
+    #
+    # If the cache is full, this method may cause the least recently used item
+    # to be evicted from the cache.
+
     def get(key)
       node = node_for_key(key)
       node.read(&@block)
     end
+
+    # Inserts a value into the cache, assigning it to the given key. (Instead of
+    # directly inserting values into the cache, it is recommended that you supply
+    # a block to the constructor to generate values on demand.)
 
     def put(key, value)
       node = node_for_key(key)
       node.write(value)
     end
 
-    def empty!
-      @lock.synchronize do
-        @store.empty!
-        @leftmost = nil
-        @rightmost = nil
-      end
-    end
+    # Verify the data structures used to maintain the cache. If a problem is
+    # detected, an exception is raised. This method is intended for testing and
+    # debugging only.
 
-    # Verify the list structure. Intended for testing and debugging only.
     def verify!
       @lock.synchronize do
         left_to_right = Array.new
@@ -110,6 +101,24 @@ module Heroic
     end
 
     private
+
+    class Node # :nodoc:
+      attr_reader :key
+      attr_accessor :left, :right
+      def initialize(key)
+        @key = key
+        @lock = Mutex.new
+      end
+      def read
+        @lock.synchronize { @value ||= yield(@key) }
+      end
+      def write(value)
+        @lock.synchronize { @value = value }
+      end
+      def to_s
+        sprintf '<Node:%x(%s)>', self.object_id, @key.inspect
+      end
+    end
 
     def node_for_key(key)
       @lock.synchronize do

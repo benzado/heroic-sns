@@ -56,22 +56,18 @@ The key `:topics` is also supported.
 `:auto_confirm` affects how on-topic subscription confirmations are handled.
 
 - If `true`, they are confirmed by retrieving the URL in the `SubscribeURL`
-  field of the SNS message, and your app is not notified.
-- If `false`, they are ignored; your app is also not notified.
+  field of the SNS message, and your app is NOT notified. This is the default.
+- If `false`, they are ignored; your app is NOT notified.
 - If `nil`, there is no special handling and the message is passed along to your
   app.
-  
-The default is `true`.
 
 `:auto_resubscribe` affects how on-topic unsubscribe confirmations are handled.
 
+- If `false`, they are ignored and your app is NOT notified. This is the default.
 - If `true`, they topic is automatically re-subscribed by retrieving the URL in
-  the `SubscribeURL` field of the SNS message, and your app is not notified.
-- If `false`, they are ignored and your app is also not notified.
+  the `SubscribeURL` field of the SNS message, and your app is NOT notified.
 - If `nil`, there is no special handling and the message is passed along to your
   app.
-
-The default is `false`.
 
 If you are a control-freak and want no special handling whatsoever, use these
 options:
@@ -134,7 +130,7 @@ anyone to subscribe your web app to any SNS notification.
 
 * Fork the project.
 * Make your feature addition or bug fix and include tests.
-* Update `CHANGELOG`.
+* Update `CHANGELOG.md`.
 * Send a pull request.
 
 ## Copyright and License

@@ -19,7 +19,10 @@ module Heroic
       end
     end
 
-    # Encapsulates an SNS message.
+    # Encapsulates an SNS message. Since Endpoint takes care of authenticating
+    # the message, most of the time you will simply be interested in retrieving
+    # the +subject+ and +body+ from the message and acting on it.
+    #
     # See: http://docs.aws.amazon.com/sns/latest/gsg/json-formats.html
     class Message
 
@@ -29,6 +32,8 @@ module Heroic
         raise Error.new("failed to parse message as JSON: #{e.message}")
       end
 
+      # The message type will be one of +SubscriptionConfirmation+,
+      # +UnsubscribeConfirmation+, and +Notification+.
       def type
         @msg['Type']
       end
@@ -37,11 +42,14 @@ module Heroic
         @msg['TopicArn']
       end
 
+      # A Universally Unique Identifier, unique for each message published. For
+      # a notification that Amazon SNS resends during a retry, the message ID of
+      # the original message is used.
       def id
         @msg['MessageId']
       end
 
-      # The timestamp as a Time object.
+      # The timestamp when the message was published, as a Time object.
       def timestamp
         Time.xmlschema(@msg['Timestamp'])
       end
@@ -64,6 +72,9 @@ module Heroic
         @msg['Subject']
       end
 
+      # The message payload. As far as Amazon and this class are concerned, the
+      # message payload is just a string of bytes. If you are expecting, for
+      # example, a JSON object, you will need to pass this to a JSON parser.
       def body
         @msg['Message']
       end
@@ -77,13 +88,13 @@ module Heroic
       end
 
       # The token is used to confirm subscriptions via the SNS API. If you visit
-      # the :subscribe_url, you can ignore this field.
+      # the +subscribe_url+, you can ignore this field.
       def token
         @msg['Token']
       end
 
-      def ==(other_message)
-        @msg == other_message.instance_variable_get(:@msg)
+      def ==(other)
+        other.is_a?(Message) && @msg == other.instance_variable_get(:@msg)
       end
 
       def hash
@@ -98,11 +109,14 @@ module Heroic
         string << ">"
       end
 
+      # Returns a JSON serialization of the message. Note that it may not be
+      # identical to the serialization that was retrieved from the network.
       def to_json
         @msg.to_json
       end
 
-      # Verifies the message signature. Raises an exception if it is not valid.
+      # Verifies the message signature. Raises Error if it is not valid.
+      #
       # See: http://docs.aws.amazon.com/sns/latest/gsg/SendMessageToHttp.verify.signature.html
       def verify!
         age = Time.now - timestamp
