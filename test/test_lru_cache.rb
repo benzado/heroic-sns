@@ -105,7 +105,7 @@ class LRUCacheTest < Test::Unit::TestCase
     # only slept for a second.
     threads.each { |t| t.join }
     time_elapsed = (Time.now - start_time)
-    assert_in_delta time_elapsed, 1.0, 0.01
+    assert_in_delta time_elapsed, 1.0, 0.05
   end
 
 end
