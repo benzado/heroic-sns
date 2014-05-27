@@ -1,5 +1,8 @@
 # Heroic::SNS, Rack middleware for Amazon SNS endpoints
 
+[![Gem Version](https://badge.fury.io/rb/heroic-sns.svg)](http://badge.fury.io/rb/heroic-sns)
+[![Build Status](https://travis-ci.org/benzado/heroic-sns.png?branch=master)](https://travis-ci.org/benzado/heroic-sns)
+
 Heroic::SNS provides secure, lightweight Rack middleware for AWS Simple
 Notification Service (SNS) endpoints.
 
@@ -164,5 +167,3 @@ This project [is licensed under the Apache license](LICENSE).
 
 Direct correspondence to Benjamin Ragheb via email at <ben@benzado.com>
 or on Twitter [@benzado](https://twitter.com/benzado).
-
-[![Build Status](https://travis-ci.org/benzado/heroic-sns.png?branch=master)](https://travis-ci.org/benzado/heroic-sns)
