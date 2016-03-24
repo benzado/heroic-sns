@@ -44,4 +44,16 @@ class EndpointTest < Test::Unit::TestCase
     assert_nothing_raised { app.call(@env) }
   end
 
+  def test_rewind
+    result = [0, {}, []]
+
+    test = Proc.new do |env|
+      msg_json = JSON.parse(env['rack.input'].read)
+      assert_equal(msg_json['Message'],'booyakasha!')
+      result
+    end
+    sns('notification')
+    app = Heroic::SNS::Endpoint.new test, :topic => @msg.topic_arn
+    assert_equal result, app.call(@env)
+  end
 end

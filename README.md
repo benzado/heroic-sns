@@ -9,6 +9,8 @@ Notification Service (SNS) endpoints.
 Any SNS messages POSTed by Amazon to your web application are
 intercepted, parsed, verified, and then passed along via the
 `sns.message` environment key.
+(In case you need it, the original, unparsed message is also available in the
+body of the request.)
 
 If something goes wrong, the error will be passed along via the
 `sns.error` environment key. `Heroic::SNS::Endpoint` does not log any

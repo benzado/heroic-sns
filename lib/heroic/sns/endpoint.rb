@@ -110,6 +110,7 @@ module Heroic
       def call_on_topic(env)
         begin
           message = Message.new(env['rack.input'].read)
+          env['rack.input'].rewind
           check_headers!(message, env)
           message.verify!
           case message.type
