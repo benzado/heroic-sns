@@ -1,3 +1,8 @@
+### 1.1.2 (March 23, 2016)
+
+* Rewind the request body, in case the application wants to read it again.
+  [@cobbr2]
+
 ### 1.1.1 (August 9, 2013)
 
 * Ease up json gem dependency - [@speedmanly]
