@@ -120,7 +120,7 @@ module Heroic
       # See: http://docs.aws.amazon.com/sns/latest/gsg/SendMessageToHttp.verify.signature.html
       def verify!
         age = Time.now - timestamp
-        raise Error.new("timestamp is in the future", self) if age < 0
+        raise Error.new("timestamp is in the future, age: #{age}", self) if age < 0
         raise Error.new("timestamp is too old", self) if age > MAXIMUM_ALLOWED_AGE
         if signature_version != '1'
           raise Error.new("unknown signature version: #{signature_version}", self)
