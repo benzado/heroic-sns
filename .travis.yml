@@ -1,9 +1,23 @@
 language: ruby
 rvm:
-  - "2.2"
-  - "2.1"
-  - "2.0"
+  - "2.3.1"
+  - "2.2.5"
+  - "2.1.9"
+  - "2.0.0"
   - "1.9.3"
   - "1.8.7"
+gemfile:
+  - gemfiles/Gemfile.rack-1.x
+  - gemfiles/Gemfile.rack-2.x
 before_install:
   - gem update bundler
+matrix:
+  exclude:
+    - rvm: 2.1.9
+      gemfile: gemfiles/Gemfile.rack-2.x
+    - rvm: 2.0.0
+      gemfile: gemfiles/Gemfile.rack-2.x
+    - rvm: 1.9.3
+      gemfile: gemfiles/Gemfile.rack-2.x
+    - rvm: 1.8.7
+      gemfile: gemfiles/Gemfile.rack-2.x

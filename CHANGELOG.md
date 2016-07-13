@@ -1,3 +1,7 @@
+### 1.1.3 (July 7, 2016)
+
+* Relax rack version requirement to allow usage with rack 2.x - [@fschwahn]
+
 ### 1.1.2 (March 23, 2016)
 
 * Rewind the request body, in case the application wants to read it again.
