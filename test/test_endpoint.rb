@@ -10,6 +10,7 @@ class EndpointTest < Test::Unit::TestCase
     json = File.read("test/fixtures/#{name}.json")
     @msg = Heroic::SNS::Message.new(json)
     @msg.update_timestamp!
+    @msg.update_signing_cert_url!
     @msg.sign!
     @env = {
       'HTTP_X_AMZ_SNS_MESSAGE_TYPE' => @msg.type,

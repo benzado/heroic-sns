@@ -4,10 +4,11 @@ require 'helper'
 
 class MessageTest < Test::Unit::TestCase
 
-  def sns(name, timestamp = Time.now)
+  def sns(name, timestamp: Time.now, signing_cert_url: nil)
     json = File.read("test/fixtures/#{name}.json")
     msg = Heroic::SNS::Message.new(json)
     msg.update_timestamp!(timestamp)
+    msg.update_signing_cert_url!(signing_cert_url)
     msg.sign!
     return msg
   end
@@ -51,9 +52,27 @@ class MessageTest < Test::Unit::TestCase
     end
   end
 
+  def test_untrusted_cert_url_s3
+    cert_url = Heroic::SNS::FAKE_CERT_URL_S3
+    msg = sns("notification", signing_cert_url: cert_url)
+    assert_equal cert_url, msg.signing_cert_url
+    assert_raises Heroic::SNS::Error do
+      msg.verify!
+    end
+  end
+
+  def test_untrusted_cert_url_other
+    cert_url = Heroic::SNS::FAKE_CERT_URL_OTHER
+    msg = sns("subscription", signing_cert_url: cert_url)
+    assert_equal cert_url, msg.signing_cert_url
+    assert_raises Heroic::SNS::Error do
+      msg.verify!
+    end
+  end
+
   def test_expired
     t = Time.utc(1984, 5)
-    msg = sns("notification", t)
+    msg = sns("notification", timestamp: t)
     assert_equal t, msg.timestamp
     assert_raises Heroic::SNS::Error do
       msg.verify!
