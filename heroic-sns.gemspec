@@ -29,5 +29,5 @@ EOD
   s.add_development_dependency 'rdoc', '~> 4.0'
   s.add_development_dependency 'test-unit', '1.2.3'
   s.add_runtime_dependency 'rack', '>= 1.4'
-  s.add_runtime_dependency 'json', '~> 1.7'
+  s.add_runtime_dependency 'json', '>= 1.7'
 end
