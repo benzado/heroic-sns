@@ -125,7 +125,7 @@ module Heroic
         if signature_version != '1'
           raise Error.new("unknown signature version: #{signature_version}", self)
         end
-        if signing_cert_url !~ %r{\Ahttps://sns\.[a-z]{2}(?:-gov)?-(?:notificationorth|south|east|west|central){1,2}-\d+\.amazonaws\.com/}
+        if signing_cert_url !~ %r{\Ahttps://sns\.[a-z]{2}(?:-gov)?-(?:north|south|east|west|central){1,2}-\d+\.amazonaws\.com/}
           raise Error.new("signing certificate is not from amazonaws.com", self)
         end
         text = string_to_sign # will warn of invalid Type
