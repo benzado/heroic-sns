@@ -2,4 +2,4 @@ source "http://rubygems.org"
 
 gemspec
 
-gem "rake", '~> 10.3'
+gem "rake", '>= 12.3.3'
