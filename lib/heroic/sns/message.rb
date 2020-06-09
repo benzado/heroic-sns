@@ -1,5 +1,6 @@
 require 'json'
 require 'base64'
+require 'open-uri'
 require 'heroic/lru_cache'
 
 module Heroic
@@ -10,7 +11,7 @@ module Heroic
 
     CERTIFICATE_CACHE = Heroic::LRUCache.new(MAXIMUM_ALLOWED_CERTIFICATES) do |cert_url|
       begin
-        cert_data = open(cert_url)
+        cert_data = URI.parse(cert_url).open
         OpenSSL::X509::Certificate.new(cert_data.read)
       rescue OpenSSL::X509::CertificateError => e
         raise SNS::Error.new("unable to parse signing certificate: #{e.message}; URL: #{cert_url}")
