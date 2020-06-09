@@ -163,7 +163,7 @@ SNS notification.
 
 ## Copyright and License
 
-Copyright 2013, Heroic Software Inc and Contributors.
+Copyright 2013, 2016, 2020, Benjamin Ragheb and Contributors.
 
 This project [is licensed under the Apache license](LICENSE).
 
