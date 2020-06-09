@@ -25,9 +25,9 @@ EOD
   s.files       = `git ls-files`.split("\n")
 
   s.platform = Gem::Platform::RUBY
-  s.required_ruby_version = '>= 2.0.0'
+  s.required_ruby_version = '>= 1.8.7'
   s.add_development_dependency 'rdoc', '~> 4.0'
-  s.add_development_dependency 'test-unit', '1.2.3'
+  s.add_development_dependency 'test-unit', '3.3.5'
   s.add_runtime_dependency 'rack', '>= 1.4'
   s.add_runtime_dependency 'json', '>= 1.7'
 end
