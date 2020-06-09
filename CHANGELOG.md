@@ -3,6 +3,7 @@
 * Drop support for Ruby 1.8 and 1.9
 * Add Ruby 2.4, 2.5, 2.6. 2.7 to the Travis CI tests
 * Relax json gem dependency - [@biinari]
+* Stricter signing URL check - [@biinari]
 
 ### 1.1.3 (July 7, 2016)
 
