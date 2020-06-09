@@ -8,8 +8,6 @@ rvm:
   - "2.2"
   - "2.1"
   - "2.0"
-  - "1.9"
-  - "1.8"
 gemfile:
   - Gemfile
   - gemfiles/Gemfile.rack-1.x
@@ -17,7 +15,8 @@ before_install:
   - gem update bundler
 matrix:
   exclude:
-    - { gemfile: Gemfile, rvm: "2.1" }
-    - { gemfile: Gemfile, rvm: "2.0" }
-    - { gemfile: Gemfile, rvm: "1.9" }
-    - { gemfile: Gemfile, rvm: "1.8" }
+    - { rvm: "2.1", gemfile: Gemfile }
+    - { rvm: "2.0", gemfile: Gemfile }
+  include:
+    - { rvm: "1.8.7", dist: precise, gemfile: gemfiles/Gemfile.rack-1.x }
+    - { rvm: "1.9.3", dist: trusty,  gemfile: gemfiles/Gemfile.rack-1.x }
