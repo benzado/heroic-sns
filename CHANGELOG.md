@@ -4,6 +4,7 @@
 * Add Ruby 2.4, 2.5, 2.6. 2.7 to the Travis CI tests
 * Relax json gem dependency - [@biinari]
 * Stricter signing URL check - [@biinari]
+* Show age when raising 'time is in the future' error - [@mamedov]
 
 ### 1.1.3 (July 7, 2016)
 
@@ -31,9 +32,10 @@
 * Initial public release - [@benzado]
 
 [@benzado]: https://github.com/benzado
-[@sbeckeriv]: https://github.com/sbeckeriv
-[@dblock]: https://github.com/dblock
-[@speedmanly]: https://github.com/speedmanly
-[@cobbr2]: https://github.com/cobbr2
-[@fschwahn]: https://github.com/fschwahn
 [@biinari]: https://github.com/biinari
+[@cobbr2]: https://github.com/cobbr2
+[@dblock]: https://github.com/dblock
+[@fschwahn]: https://github.com/fschwahn
+[@mamedov]: https://github.com/mamedov
+[@sbeckeriv]: https://github.com/sbeckeriv
+[@speedmanly]: https://github.com/speedmanly
