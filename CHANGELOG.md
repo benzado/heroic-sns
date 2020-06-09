@@ -1,11 +1,16 @@
+### 1.2
+
+* Drop support for Ruby 1.8 and 1.9
+* Add Ruby 2.4, 2.5, 2.6. 2.7 to the Travis CI tests
+* Relax json gem dependency - [@biinari]
+
 ### 1.1.3 (July 7, 2016)
 
 * Relax rack version requirement to allow usage with rack 2.x - [@fschwahn]
 
 ### 1.1.2 (March 23, 2016)
 
-* Rewind the request body, in case the application wants to read it again.
-  [@cobbr2]
+* Rewind the request body, in case the application wants to read it again - [@cobbr2]
 
 ### 1.1.1 (August 9, 2013)
 
@@ -24,7 +29,10 @@
 
 * Initial public release - [@benzado]
 
-[@benzado]: http://github.com/benzado
-[@sbeckeriv]: http://github.com/sbeckeriv
-[@dblock]: http://github.com/dblock
-[@speedmanly]: http://github.com/speedmanly
+[@benzado]: https://github.com/benzado
+[@sbeckeriv]: https://github.com/sbeckeriv
+[@dblock]: https://github.com/dblock
+[@speedmanly]: https://github.com/speedmanly
+[@cobbr2]: https://github.com/cobbr2
+[@fschwahn]: https://github.com/fschwahn
+[@biinari]: https://github.com/biinari
