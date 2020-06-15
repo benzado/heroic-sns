@@ -3,7 +3,6 @@ require 'heroic/sns'
 require 'helper'
 
 class MessageTest < Test::Unit::TestCase
-
   def sns(name, options = {})
     json = File.read("test/fixtures/#{name}.json")
     msg = Heroic::SNS::Message.new(json)
@@ -53,7 +52,7 @@ class MessageTest < Test::Unit::TestCase
   end
 
   def test_untrusted_cert_url_s3
-    cert_url = Heroic::SNS::FAKE_CERT_URL_S3
+    cert_url = 'https://sns.s3.amazonaws.com/self-signed.pem'
     msg = sns("notification", :signing_cert_url => cert_url)
     assert_equal cert_url, msg.signing_cert_url
     assert_raises Heroic::SNS::Error do
@@ -62,7 +61,7 @@ class MessageTest < Test::Unit::TestCase
   end
 
   def test_untrusted_cert_url_other
-    cert_url = Heroic::SNS::FAKE_CERT_URL_OTHER
+    cert_url = 'https://example.com/sns.us-east-1.amazonaws.com/self-signed.pem'
     msg = sns("subscription", :signing_cert_url => cert_url)
     assert_equal cert_url, msg.signing_cert_url
     assert_raises Heroic::SNS::Error do
