@@ -69,6 +69,17 @@ class MessageTest < Test::Unit::TestCase
     end
   end
 
+  # Generate tests for every known AWS SNS endpoint.
+  # https://docs.aws.amazon.com/general/latest/gr/sns.html
+  File.read('test/fixtures/aws-sns-endpoints.txt').split(/\n/).each do |domain|
+    define_method("test_trusted_cert_url_#{domain}") do
+      cert_url = "https://#{domain}/certificate.pem"
+      msg = sns("notification", :signing_cert_url => cert_url)
+      assert_equal cert_url, msg.signing_cert_url
+      assert_nothing_raised { msg.verify! }
+    end
+  end
+
   def test_expired
     t = Time.utc(1984, 5)
     msg = sns("notification", :timestamp => t)
@@ -77,5 +88,4 @@ class MessageTest < Test::Unit::TestCase
       msg.verify!
     end
   end
-
 end

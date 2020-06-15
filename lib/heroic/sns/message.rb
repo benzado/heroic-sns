@@ -20,6 +20,8 @@ module Heroic
       end
     end
 
+    VALID_AWS_URL_PATTERN = %r{\Ahttps://sns\.[a-z]{2}(?:-gov)?-(?:north|south|east|west|central){1,2}-\d+\.amazonaws\.com(?:\.cn)?/}
+
     # Encapsulates an SNS message. Since Endpoint takes care of authenticating
     # the message, most of the time you will simply be interested in retrieving
     # the +subject+ and +body+ from the message and acting on it.
@@ -126,7 +128,7 @@ module Heroic
         if signature_version != '1'
           raise Error.new("unknown signature version: #{signature_version}", self)
         end
-        if signing_cert_url !~ %r{\Ahttps://sns\.[a-z]{2}(?:-gov)?-(?:north|south|east|west|central){1,2}-\d+\.amazonaws\.com/}
+        if signing_cert_url !~ VALID_AWS_URL_PATTERN
           raise Error.new("signing certificate is not from amazonaws.com", self)
         end
         text = string_to_sign # will warn of invalid Type
