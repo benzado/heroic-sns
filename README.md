@@ -1,7 +1,7 @@
 # Heroic::SNS, Rack middleware for Amazon SNS endpoints
 
 [![Gem Version](https://badge.fury.io/rb/heroic-sns.svg)](http://badge.fury.io/rb/heroic-sns)
-[![Build Status](https://travis-ci.org/benzado/heroic-sns.png?branch=master)](https://travis-ci.org/benzado/heroic-sns)
+[![Build Status](https://travis-ci.org/benzado/heroic-sns.svg?branch=master)](https://travis-ci.org/benzado/heroic-sns)
 
 Heroic::SNS provides secure, lightweight Rack middleware for AWS Simple
 Notification Service (SNS) endpoints.
