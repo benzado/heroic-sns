@@ -1,4 +1,8 @@
-### 1.2
+### Unreleased Changes
+
+(nothing yet)
+
+### 1.2 (June 15, 2020)
 
 * Add Ruby 2.4, 2.5, 2.6. 2.7 to the Travis CI tests
 * Relax json gem dependency - [@biinari]
